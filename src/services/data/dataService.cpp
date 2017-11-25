@@ -13,6 +13,8 @@ int DataService::sendSensorReadings(String sensorReadingsJson)
     httpClient.addHeader("Content-Type", "application/json");
 
     int httpStatusCode = httpClient.POST(sensorReadingsJson);
+    String payload = httpClient.getString();
+
     httpClient.end();
 
     return httpStatusCode;
