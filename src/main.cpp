@@ -6,7 +6,7 @@ ConfigService configService;
 WifiService wifiService;
 DataService dataService(configService);
 
-uint32_t sleepTime = 3600e6;
+uint32_t sleepTime = 1000000L * 60L * 15L;
 
 void setup()
 {
