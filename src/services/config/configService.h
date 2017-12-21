@@ -12,7 +12,6 @@ private:
 
 public:
   ConfigService();
-  static ConfigService *getInstance();
 
   Configuration getConfiguration();
   void setConfiguration(Configuration config);

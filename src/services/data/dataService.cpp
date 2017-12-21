@@ -5,15 +5,14 @@ DataService::DataService(ConfigService configService)
     this->configurationService = configService;
 }
 
-int DataService::sendSensorReadings(String sensorReadingsJson)
+int DataService::sendSensorReadings(String sensorReadingsJson, String sensorId)
 {
     Configuration config = this->configurationService.getConfiguration();
 
-    httpClient.begin(config.appServer);
+    httpClient.begin(config.appServer + "/" + sensorId + "/reading");
     httpClient.addHeader("Content-Type", "application/json");
 
     int httpStatusCode = httpClient.POST(sensorReadingsJson);
-    String payload = httpClient.getString();
 
     httpClient.end();
 
