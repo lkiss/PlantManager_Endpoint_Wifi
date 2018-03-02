@@ -3,6 +3,7 @@
 
 #include "../config/configService.h"
 
+#include <Arduino.h>
 #include <ESP8266HTTPClient.h>
 
 class DataService
@@ -14,7 +15,8 @@ private:
 public:
   DataService(ConfigService configService);
   int sendSensorReadings(String sensorReadingsJson, String sensorId);
-  void getConfigurationFromServer();
+  String getConfiguration(String sensorId);
+  String getPlantGrowingStep(String sensorId);
 };
 
 #endif

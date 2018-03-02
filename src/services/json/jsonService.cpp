@@ -26,7 +26,7 @@ Configuration JsonService::convertJsonToConfig(String configJson)
     DynamicJsonBuffer buffer(200);
 
     JsonObject &config = buffer.parseObject(configJson);
-    
+    configuration.appServer = config["appServer"].as<char*>();
 
     return configuration;
 }

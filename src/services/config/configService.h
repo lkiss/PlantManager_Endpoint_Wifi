@@ -7,7 +7,6 @@
 class ConfigService
 {
 private:
-  static ConfigService *instance;
   Configuration config;
 
 public:
