@@ -8,9 +8,7 @@
 class JsonService
 {
 public:
-  String getSensorIdFromJson(String sensorReadingJson);
-  String convertConfigToJson(Configuration config);
-  Configuration convertJsonToConfig(String configJson);
+  Configuration convertJsonToConfig(String &configJson);
 };
 
 #endif

@@ -1,32 +1,16 @@
 #include "./jsonService.h"
 
-String JsonService::getSensorIdFromJson(String sensorReadingJson){
-    DynamicJsonBuffer jsonBuffer(350);
-
-    JsonObject& root = jsonBuffer.parseObject(sensorReadingJson);
-    return root["sensor"]["sensorId"];
-}
-
-String JsonService::convertConfigToJson(Configuration configuration)
+Configuration JsonService::convertJsonToConfig(String &configJson)
 {
-    String jsonMessage;
-    DynamicJsonBuffer jsonBuffer(250);
-
-    JsonObject &config = jsonBuffer.createObject();
-
-    config.printTo(jsonMessage);
-
-    return jsonMessage;
-}
-
-Configuration JsonService::convertJsonToConfig(String configJson)
-{
+    const size_t bufferSize = JSON_OBJECT_SIZE(1) + 70;
     Configuration configuration = Configuration();
     String jsonMessage;
-    DynamicJsonBuffer buffer(200);
+    DynamicJsonBuffer buffer(bufferSize);
 
     JsonObject &config = buffer.parseObject(configJson);
     configuration.appServer = config["appServer"].as<char*>();
+
+    buffer.clear();
 
     return configuration;
 }

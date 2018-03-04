@@ -22,35 +22,37 @@ void setup()
     digitalWrite(readyPin, LOW);
 
     wifiService.begin();
-    Serial.begin(9600);
-    Serial.setTimeout(10000);
-    Serial.flush();
-    digitalWrite(readyPin, HIGH);
+    espSerial.begin(9600);
+    espSerial.setTimeout(10000);
+    espSerial.flush();
 }
 
 void loop()
 {
-    if (Serial.available())
+    delay(1000);
+    digitalWrite(readyPin, HIGH);
+    if (espSerial.available() > 0)
     {
         digitalWrite(readyPin, LOW);
-        String sensorId = Serial.readStringUntil('\n');
+        String sensorId = espSerial.readStringUntil('\n');
         sensorId.trim();
+
         String configString = dataService.getConfiguration(sensorId);
         configService.setConfiguration(jsonService.convertJsonToConfig(configString));
 
         String plantGrowingStep = dataService.getPlantGrowingStep(sensorId);
 
-        Serial.println(plantGrowingStep);
-        Serial.flush();
+        espSerial.println(plantGrowingStep);
+        espSerial.flush();
 
-        while (!Serial.available())
+        while (espSerial.available() == 0)
         {
             delay(100);
         }
 
-        messageFromSensor.concat(Serial.readStringUntil('\n'));
+        messageFromSensor.concat(espSerial.readStringUntil('\n'));
 
         dataService.sendSensorReadings(messageFromSensor, sensorId);
-        Serial.println("Done");
+        espSerial.println("Done");
     }
 }

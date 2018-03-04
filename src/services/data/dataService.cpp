@@ -5,7 +5,7 @@ DataService::DataService(ConfigService configService)
     this->configurationService = configService;
 }
 
-int DataService::sendSensorReadings(String sensorReadingsJson, String sensorId)
+int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId)
 {
     Configuration config = this->configurationService.getConfiguration();
     String requestUrl = config.appServer + "/" + sensorId + "/reading";
@@ -20,7 +20,7 @@ int DataService::sendSensorReadings(String sensorReadingsJson, String sensorId)
     return httpStatusCode;
 }
 
-String DataService::getConfiguration(String sensorId)
+String DataService::getConfiguration(String &sensorId)
 {
     Configuration config = this->configurationService.getConfiguration();
     String configPayload = "";
@@ -41,7 +41,7 @@ String DataService::getConfiguration(String sensorId)
     return configPayload;
 }
 
-String DataService::getPlantGrowingStep(String sensorId)
+String DataService::getPlantGrowingStep(String &sensorId)
 {
     Configuration config = this->configurationService.getConfiguration();
     String plantGrowingStep = "";
