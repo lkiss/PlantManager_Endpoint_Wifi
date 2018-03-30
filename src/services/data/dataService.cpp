@@ -49,9 +49,7 @@ String DataService::getPlantGrowingStep(String &sensorId)
     String requestUrl = config.appServer + "/" + sensorId + "/currentplantgrowingstep";
 
     httpClient.begin(requestUrl);
-
     int httpStatusCode = httpClient.GET();
-
     if (httpStatusCode == HTTP_CODE_OK)
     {
         plantGrowingStep = httpClient.getString();

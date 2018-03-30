@@ -3,11 +3,8 @@
 
 #include "./services/services.h"
 
-int receivePin = 4;
-int transmitPin = 5;
 int readyPin = 14;
-
-SoftwareSerial espSerial(receivePin, transmitPin);
+bool isWifiReady = false;
 
 ConfigService configService;
 JsonService jsonService;
@@ -22,37 +19,36 @@ void setup()
     digitalWrite(readyPin, LOW);
 
     wifiService.begin();
-    espSerial.begin(9600);
-    espSerial.setTimeout(10000);
-    espSerial.flush();
+    Serial.begin(9600);
+    Serial.swap();
 }
 
 void loop()
 {
-    delay(1000);
     digitalWrite(readyPin, HIGH);
-    if (espSerial.available() > 0)
+
+    if (Serial.available())
     {
-        digitalWrite(readyPin, LOW);
-        String sensorId = espSerial.readStringUntil('\n');
+        String sensorId = Serial.readStringUntil('\n');
         sensorId.trim();
+
+        digitalWrite(readyPin, LOW);
 
         String configString = dataService.getConfiguration(sensorId);
         configService.setConfiguration(jsonService.convertJsonToConfig(configString));
 
         String plantGrowingStep = dataService.getPlantGrowingStep(sensorId);
+        Serial.println(plantGrowingStep);
 
-        espSerial.println(plantGrowingStep);
-        espSerial.flush();
-
-        while (espSerial.available() == 0)
+        while (!Serial.available())
         {
-            delay(100);
         }
 
-        messageFromSensor.concat(espSerial.readStringUntil('\n'));
-
+        messageFromSensor.concat(Serial.readStringUntil('\n'));
+        Serial.flush();
+        
         dataService.sendSensorReadings(messageFromSensor, sensorId);
-        espSerial.println("Done");
+        Serial.end();
+        ESP.deepSleep(0);
     }
 }
