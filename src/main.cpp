@@ -4,23 +4,27 @@
 #include "./services/services.h"
 
 int readyPin = 14;
+int configPin = 5;
 bool isWifiReady = false;
 
-ConfigService configService;
 JsonService jsonService;
-WifiService wifiService;
+ConfigService configService(jsonService);
 DataService dataService(configService);
+WifiService wifiService(configService);
 
 String messageFromSensor;
 
 void setup()
 {
     pinMode(readyPin, OUTPUT);
+    pinMode(configPin, INPUT);
     digitalWrite(readyPin, LOW);
-
-    wifiService.begin();
     Serial.begin(9600);
-    Serial.swap();
+    wifiService.begin(digitalRead(configPin));
+
+    // Serial.println(digitalRead(configPin));
+
+    //Serial.swap();
 }
 
 void loop()
@@ -32,22 +36,50 @@ void loop()
         String sensorId = Serial.readStringUntil('\n');
         sensorId.trim();
 
+        // Serial.println("SensorId read");
+
         digitalWrite(readyPin, LOW);
 
-        String configString = dataService.getConfiguration(sensorId);
-        configService.setConfiguration(jsonService.convertJsonToConfig(configString));
+        String plantGrowingStep;
 
-        String plantGrowingStep = dataService.getPlantGrowingStep(sensorId);
-        Serial.println(plantGrowingStep);
-
-        while (!Serial.available())
+        if (configService.getConfiguration().appServer != "")
         {
+            String configString = dataService.getConfiguration(sensorId);
+
+            configService.setConfiguration(configString);
+
+            plantGrowingStep = dataService.getPlantGrowingStep(sensorId);
+            // Serial.println("Configuration from cloud: ");
+        }
+        else
+        {
+            // Serial.println("Configuration from memory: ");
+            // Serial.println(configService.getConfiguration().plantGrowingStep);
+            Configuration config = configService.getConfiguration();
+            // Serial.println(config.plantGrowingStep);
+            // Serial.println(config.appServer);
+            // Serial.println(config.ssid);
+            // Serial.println(config.password);
+            plantGrowingStep = config.plantGrowingStep;
+            plantGrowingStep.replace("'", "\"");
         }
 
-        messageFromSensor.concat(Serial.readStringUntil('\n'));
+        // Serial.println("Sending plant growing step config");
+        Serial.println(plantGrowingStep);
+
+        if (configService.getConfiguration().appServer != "")
+        {
+            while (!Serial.available())
+            {
+            }
+
+            // Serial.println("Before sensor read");
+            messageFromSensor.concat(Serial.readStringUntil('\n'));
+
+            dataService.sendSensorReadings(messageFromSensor, sensorId);
+        }
+
         Serial.flush();
-        
-        dataService.sendSensorReadings(messageFromSensor, sensorId);
         Serial.end();
         ESP.deepSleep(0);
     }

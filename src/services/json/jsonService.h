@@ -2,6 +2,7 @@
 #define JSON_SERVICE
 
 #include <ArduinoJson.h>
+#include <Arduino.h>
 #include "../config/config.h"
 #include "../sensor/sensorReading.h"
 

@@ -1,9 +1,15 @@
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
+
+#include "../config/configService.h"
+
 class WifiService
 {
   private:
-    const char* ssid = "PNSC";
-    const char* password = "5113111_Cons!";
+    ConfigService configService;
 
   public:
-    void begin();
+    WifiService(ConfigService configService);
+    void begin(bool isConfigEnabled);
 };
