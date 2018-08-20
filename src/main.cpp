@@ -4,7 +4,7 @@
 #include "./services/services.h"
 
 int readyPin = 14;
-int configPin = 5;
+int reConfigPin = 5;
 bool isWifiReady = false;
 
 JsonService jsonService;
@@ -17,10 +17,10 @@ String messageFromSensor;
 void setup()
 {
     pinMode(readyPin, OUTPUT);
-    pinMode(configPin, INPUT);
+    pinMode(reConfigPin, INPUT);
     digitalWrite(readyPin, LOW);
     Serial.begin(9600);
-    wifiService.begin(digitalRead(configPin));
+    wifiService.begin(digitalRead(reConfigPin));
 
     // Serial.println(digitalRead(configPin));
 

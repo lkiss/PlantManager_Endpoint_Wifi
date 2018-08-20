@@ -3,6 +3,7 @@
 #include <ESP8266WebServer.h>
 
 #include "../config/configService.h"
+#include "../../constants.h"
 
 class WifiService
 {

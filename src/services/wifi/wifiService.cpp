@@ -23,12 +23,20 @@ void WifiService::begin(bool isConfigEnabled)
 
   if (isConfigEnabled)
   {
+    WiFi.softAPConfig(LOCAL_IP, GATEWAY, SUBNET);
     WiFi.softAP("PlantManager_Device");
+
     ESP8266WebServer server(80);
 
     bool isConfigSet = false;
 
     // Serial.println("Waiting for configuration");
+
+    server.on("/", HTTP_GET, [&server]() {
+      // Serial.println("Request send");
+      server.send(200);
+      delay(300);
+    });
 
     server.on("/", HTTP_PUT, [&server, &service, &isConfigSet]() {
       if (server.hasArg("plain") == false)
