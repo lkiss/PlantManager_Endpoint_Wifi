@@ -11,6 +11,7 @@ JsonService jsonService;
 ConfigService configService(jsonService);
 DataService dataService(configService);
 WifiService wifiService(configService);
+ServerService serverService;
 
 String messageFromSensor;
 
@@ -20,7 +21,11 @@ void setup()
     pinMode(reConfigPin, INPUT);
     digitalWrite(readyPin, LOW);
     Serial.begin(9600);
-    wifiService.begin(digitalRead(reConfigPin));
+    if (digitalRead(reConfigPin) == HIGH)
+    {
+        serverService.start();
+    }
+    wifiService.connectToWifiNetwork();
 
     // Serial.println(digitalRead(configPin));
 
