@@ -12,5 +12,5 @@ class WifiService
 
   public:
     WifiService(ConfigService configService);
-    void begin(bool isConfigEnabled);
+    void connectToWifiNetwork();
 };
