@@ -25,11 +25,10 @@ void setup()
     {
         serverService.start();
     }
-    wifiService.connectToWifiNetwork();
+    wifiService.connectIfConfigured();
 
-    // Serial.println(digitalRead(configPin));
-
-    //Serial.swap();
+    // Serial.swap();
+    Serial.println("Not swapped");
 }
 
 void loop()
@@ -47,7 +46,7 @@ void loop()
 
         String plantGrowingStep;
 
-        if (configService.getConfiguration().appServer != "")
+        if (configService.isCloudConfigured())
         {
             String configString = dataService.getConfiguration(sensorId);
 
@@ -60,11 +59,14 @@ void loop()
         {
             // Serial.println("Configuration from memory: ");
             // Serial.println(configService.getConfiguration().plantGrowingStep);
+            
             Configuration config = configService.getConfiguration();
+
             // Serial.println(config.plantGrowingStep);
             // Serial.println(config.appServer);
             // Serial.println(config.ssid);
             // Serial.println(config.password);
+
             plantGrowingStep = config.plantGrowingStep;
             plantGrowingStep.replace("'", "\"");
         }
@@ -72,7 +74,7 @@ void loop()
         // Serial.println("Sending plant growing step config");
         Serial.println(plantGrowingStep);
 
-        if (configService.getConfiguration().appServer != "")
+        if (configService.isCloudConfigured())
         {
             while (!Serial.available())
             {

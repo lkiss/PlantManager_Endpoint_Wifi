@@ -15,10 +15,10 @@ Configuration JsonService::convertJsonToConfig(String &configJson)
         // Serial.println("Assign values from json");
         // Serial.println(config["plantGrowingStep"].as<char *>());
 
-        configuration.plantGrowingStep = config["plantGrowingStep"].as<char *>();
-        configuration.appServer = config["appServer"].as<char *>();
-        configuration.ssid = config["ssid"].as<char *>();
-        configuration.password = config["password"].as<char *>();
+        configuration.plantGrowingStep = config["plantGrowingStep"].as<String>();
+        configuration.appServer = config["appServer"].as<String>();
+        configuration.ssid = config["ssid"].as<String>();
+        configuration.password = config["password"].as<String>();
 
         buffer.clear();
     }
@@ -26,7 +26,7 @@ Configuration JsonService::convertJsonToConfig(String &configJson)
     // Serial.println("After jsonParse");
     // Serial.println("PlantGrowingStep from config: ");
     // Serial.println(configuration.plantGrowingStep);
-    // Serial.println(config["plantGrowingStep"].as<char *>());
+    // Serial.println(config["plantGrowingStep"].as<String>());
 
     return configuration;
 }

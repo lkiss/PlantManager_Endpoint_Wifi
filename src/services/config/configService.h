@@ -21,6 +21,7 @@ public:
 
   Configuration getConfiguration();
   void setConfiguration(String config);
+  bool isCloudConfigured();
 };
 
 #endif

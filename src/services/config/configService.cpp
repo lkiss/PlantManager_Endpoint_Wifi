@@ -31,6 +31,13 @@ void ConfigService::setConfiguration(String config)
   // Serial.println("After Jsonconvert");
 }
 
+bool ConfigService::isCloudConfigured()
+{
+  Configuration configuration = this->getConfiguration();
+
+  return configuration.appServer != "" && configuration.ssid != "" && configuration.password != "";
+}
+
 int ConfigService::saveConfig(String value, bool isReset)
 {
   EEPROM.begin(512);

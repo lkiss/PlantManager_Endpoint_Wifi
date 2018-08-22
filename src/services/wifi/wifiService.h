@@ -9,8 +9,9 @@ class WifiService
 {
   private:
     ConfigService configService;
+    bool isWifiConfigured();
 
   public:
     WifiService(ConfigService configService);
-    void connectToWifiNetwork();
+    void connectIfConfigured();
 };
