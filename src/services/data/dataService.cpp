@@ -41,21 +41,21 @@ String DataService::getConfiguration(String &sensorId)
     return configPayload;
 }
 
-String DataService::getPlantGrowingStep(String &sensorId)
+String DataService::getsensorConfiguration(String &sensorId)
 {
     Configuration config = this->configurationService.getConfiguration();
-    String plantGrowingStep = "";
+    String sensorConfiguration = "";
 
-    String requestUrl = config.appServer + "/" + sensorId + "/currentplantgrowingstep";
+    String requestUrl = config.appServer + "/" + sensorId + "/currentsensorConfiguration";
 
     httpClient.begin(requestUrl);
     int httpStatusCode = httpClient.GET();
     if (httpStatusCode == HTTP_CODE_OK)
     {
-        plantGrowingStep = httpClient.getString();
+        sensorConfiguration = httpClient.getString();
     }
 
     httpClient.end();
 
-    return plantGrowingStep;
+    return sensorConfiguration;
 }

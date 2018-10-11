@@ -44,35 +44,35 @@ void loop()
 
         digitalWrite(readyPin, LOW);
 
-        String plantGrowingStep;
+        String sensorConfiguration;
 
         if (configService.isCloudConfigured())
         {
-            String configString = dataService.getConfiguration(sensorId);
+            // String configString = dataService.getConfiguration(sensorId);
 
-            configService.setConfiguration(configString);
+            // configService.setConfiguration(configString);
 
-            plantGrowingStep = dataService.getPlantGrowingStep(sensorId);
+            sensorConfiguration = dataService.getsensorConfiguration(sensorId);
             // Serial.println("Configuration from cloud: ");
         }
         else
         {
             // Serial.println("Configuration from memory: ");
-            // Serial.println(configService.getConfiguration().plantGrowingStep);
+            // Serial.println(configService.getConfiguration().sensorConfiguration);
             
             Configuration config = configService.getConfiguration();
 
-            // Serial.println(config.plantGrowingStep);
+            // Serial.println(config.sensorConfiguration);
             // Serial.println(config.appServer);
             // Serial.println(config.ssid);
             // Serial.println(config.password);
 
-            plantGrowingStep = config.plantGrowingStep;
-            plantGrowingStep.replace("'", "\"");
+            sensorConfiguration = config.sensorConfiguration;
+            sensorConfiguration.replace("'", "\"");
         }
 
         // Serial.println("Sending plant growing step config");
-        Serial.println(plantGrowingStep);
+        Serial.println(sensorConfiguration);
 
         if (configService.isCloudConfigured())
         {

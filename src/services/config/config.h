@@ -6,7 +6,7 @@ struct Configuration
   String appServer;
   String ssid;
   String password;
-  String plantGrowingStep;
+  String sensorConfiguration;
 };
 
 #endif

@@ -16,7 +16,7 @@ Configuration ConfigService::getConfiguration()
   // Serial.println(jsonConfig);
   Configuration config = this->jsonService.convertJsonToConfig(jsonConfig);
 
-  // Serial.println(config.plantGrowingStep);
+  // Serial.println(config.sensorConfiguration);
   return config;
 }
 

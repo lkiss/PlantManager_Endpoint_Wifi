@@ -16,7 +16,7 @@ public:
   DataService(ConfigService configService);
   int sendSensorReadings(String &sensorReadingsJson, String &sensorId);
   String getConfiguration(String &sensorId);
-  String getPlantGrowingStep(String &sensorId);
+  String getsensorConfiguration(String &sensorId);
 };
 
 #endif
