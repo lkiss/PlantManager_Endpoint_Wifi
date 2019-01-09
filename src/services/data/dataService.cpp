@@ -5,10 +5,10 @@ DataService::DataService(ConfigService configService)
     this->configurationService = configService;
 }
 
-int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId)
+int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId, String &sensorNumber)
 {
     Configuration config = this->configurationService.getConfiguration();
-    String requestUrl = config.appServer + "/" + sensorId + "/reading";
+    String requestUrl = config.appServer + "/" + sensorId + "/" + sensorNumber + "/reading";
 
     httpClient.begin(requestUrl);
     httpClient.addHeader("Content-Type", "application/json");
@@ -20,12 +20,12 @@ int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId
     return httpStatusCode;
 }
 
-String DataService::getConfiguration(String &sensorId)
+String DataService::getConfiguration(String &sensorId, String &sensorNumber)
 {
     Configuration config = this->configurationService.getConfiguration();
     String configPayload = "";
 
-    String requestUrl = config.appServer + "/" + sensorId + "/configuration";
+    String requestUrl = config.appServer + "/" + sensorId + "/" + sensorNumber + "/configuration";
 
     httpClient.begin(requestUrl);
 
@@ -41,12 +41,15 @@ String DataService::getConfiguration(String &sensorId)
     return configPayload;
 }
 
-String DataService::getsensorConfiguration(String &sensorId)
+String DataService::getsensorConfiguration(String &sensorId, String &sensorNumber)
 {
     Configuration config = this->configurationService.getConfiguration();
     String sensorConfiguration = "";
 
-    String requestUrl = config.appServer + "/" + sensorId + "/currentsensorConfiguration";
+    String requestUrl = config.appServer + "/" + sensorId + "/" + sensorNumber + "/configuration";
+
+    // Serial.print("Request URL");
+    // Serial.println(requestUrl);
 
     httpClient.begin(requestUrl);
     int httpStatusCode = httpClient.GET();
@@ -56,6 +59,7 @@ String DataService::getsensorConfiguration(String &sensorId)
     }
 
     httpClient.end();
-
+    // Serial.println("sensorConfiguration");
+    // Serial.println(sensorConfiguration);
     return sensorConfiguration;
 }

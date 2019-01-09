@@ -2,10 +2,11 @@
 #include <SoftwareSerial.h>
 
 #include "./services/services.h"
+#include "./utility/utility.h"
 
 int readyPin = 14;
 int reConfigPin = 5;
-bool isWifiReady = false;
+int statusLedPin = 2;
 
 JsonService jsonService;
 ConfigService configService(jsonService);
@@ -13,10 +14,13 @@ DataService dataService(configService);
 WifiService wifiService(configService);
 ServerService serverService;
 
+Utility utilities;
+
 String messageFromSensor;
 
 void setup()
 {
+    pinMode(statusLedPin, OUTPUT);
     pinMode(readyPin, OUTPUT);
     pinMode(reConfigPin, INPUT);
     digitalWrite(readyPin, LOW);
@@ -27,8 +31,10 @@ void setup()
     }
     wifiService.connectIfConfigured();
 
-    // Serial.swap();
-    Serial.println("Not swapped");
+    Serial.swap();
+    // Serial.println("Not swapped");
+
+    digitalWrite(statusLedPin, HIGH);
 }
 
 void loop()
@@ -37,8 +43,17 @@ void loop()
 
     if (Serial.available())
     {
-        String sensorId = Serial.readStringUntil('\n');
+        utilities.oscillatePin(statusLedPin, 500, 1);
+        String sensorId = Serial.readStringUntil(' ');
+        String sensorNumber = Serial.readStringUntil('\n');
         sensorId.trim();
+        sensorNumber.trim();
+
+        // Serial.print("SensorId: ");
+        // Serial.println(sensorId);
+
+        // Serial.print("Sensor Number: ");
+        // Serial.println(sensorNumber);
 
         // Serial.println("SensorId read");
 
@@ -48,18 +63,15 @@ void loop()
 
         if (configService.isCloudConfigured())
         {
-            // String configString = dataService.getConfiguration(sensorId);
-
-            // configService.setConfiguration(configString);
-
-            sensorConfiguration = dataService.getsensorConfiguration(sensorId);
-            // Serial.println("Configuration from cloud: ");
+            utilities.oscillatePin(statusLedPin, 500, 2);
+            sensorConfiguration = dataService.getsensorConfiguration(sensorId, sensorNumber);
         }
         else
         {
+            utilities.oscillatePin(statusLedPin, 500, 3);
             // Serial.println("Configuration from memory: ");
             // Serial.println(configService.getConfiguration().sensorConfiguration);
-            
+
             Configuration config = configService.getConfiguration();
 
             // Serial.println(config.sensorConfiguration);
@@ -78,12 +90,14 @@ void loop()
         {
             while (!Serial.available())
             {
+                yield();
             }
 
             // Serial.println("Before sensor read");
             messageFromSensor.concat(Serial.readStringUntil('\n'));
 
-            dataService.sendSensorReadings(messageFromSensor, sensorId);
+            dataService.sendSensorReadings(messageFromSensor, sensorId, sensorNumber);
+            utilities.oscillatePin(statusLedPin, 500, 4);
         }
 
         Serial.flush();
