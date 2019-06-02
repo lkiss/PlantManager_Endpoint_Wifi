@@ -2,26 +2,32 @@
 
 Configuration JsonService::convertJsonToConfig(String &configJson)
 {
-    const size_t bufferSize = 2 * JSON_OBJECT_SIZE(4) + 210;
+    const size_t bufferSize = 1024;
     Configuration configuration = Configuration();
-    String jsonMessage;
-    DynamicJsonBuffer buffer(bufferSize);
+    StaticJsonDocument<bufferSize> document;
 
     // Serial.println(configJson);
     // Serial.println("Before jsonParse");
-    JsonObject &config = buffer.parseObject(configJson);
-    if (config.success())
+    // Serial.println("Jsonmemory usage: ");
+    // Serial.println(document.memoryUsage());
+
+    auto error = deserializeJson(document, configJson);
+    if (error)
     {
-        // Serial.println("Assign values from json");
-        // Serial.println(config["sensorConfiguration"].as<char *>());
-
-        configuration.sensorConfiguration = config["sensorConfiguration"].as<String>();
-        configuration.appServer = config["appServer"].as<String>();
-        configuration.ssid = config["ssid"].as<String>();
-        configuration.password = config["password"].as<String>();
-
-        buffer.clear();
+        Serial.print(F("deserializeJson() failed with code "));
+        Serial.println(error.c_str());
+        return configuration;
     }
+
+    // Serial.println("Assign values from json");
+    // Serial.println(config["sensorConfiguration"].as<char *>());
+
+    configuration.sensorConfiguration = document["sc"].as<String>();
+    configuration.appServer = document["as"].as<String>();
+    configuration.ssid = document["ssid"].as<String>();
+    configuration.password = document["pswd"].as<String>();
+
+    document.clear();
 
     // Serial.println("After jsonParse");
     // Serial.println("sensorConfiguration from config: ");

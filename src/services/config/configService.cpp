@@ -40,9 +40,9 @@ bool ConfigService::isCloudConfigured()
 
 int ConfigService::saveConfig(String value, bool isReset)
 {
-  EEPROM.begin(512);
+  EEPROM.begin(this->romSize);
   // Serial.println("SaveConfig");
-  int stringLength = isReset ? 512 : value.length();
+  int stringLength = isReset ? this->romSize : value.length();
 
   if (stringLength == 0 || value == NULL)
   {
@@ -82,7 +82,7 @@ int ConfigService::saveConfig(String value, bool isReset)
 
 String ConfigService::getConfig()
 {
-  EEPROM.begin(512);
+  EEPROM.begin(this->romSize);
   // Serial.println("ReadConfig");
   char buffer[EEPROM.length()];
   for (int i = 0; i < EEPROM.length(); i++)

@@ -11,6 +11,7 @@ class ConfigService
 private:
   JsonService jsonService;
   int ConfigurationAddress = 0;
+  int romSize = 1024;
 
   int saveConfig(String value, bool isReset);
   String getConfig();

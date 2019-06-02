@@ -15,6 +15,13 @@ int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId
 
     int httpStatusCode = httpClient.POST(sensorReadingsJson);
 
+    // if (httpStatusCode != HTTP_CODE_CREATED)
+    // {
+    //     Serial.println("RequestUrl:");
+    //     Serial.println(requestUrl);
+    //     Serial.println(httpStatusCode);
+    // }
+
     httpClient.end();
 
     return httpStatusCode;
@@ -35,6 +42,12 @@ String DataService::getConfiguration(String &sensorId, String &sensorNumber)
     {
         configPayload = httpClient.getString();
     }
+    // else
+    // {
+    //     Serial.println("RequestUrl:");
+    //     Serial.println(requestUrl);
+    //     Serial.println(httpStatusCode);
+    // }
 
     httpClient.end();
 
@@ -57,6 +70,13 @@ String DataService::getsensorConfiguration(String &sensorId, String &sensorNumbe
     {
         sensorConfiguration = httpClient.getString();
     }
+    // else
+    // {
+    //     Serial.println("RequestUrl:");
+    //     Serial.println(requestUrl);
+    //     Serial.println("StatusCode");
+    //     Serial.println(httpStatusCode);
+    // }
 
     httpClient.end();
     // Serial.println("sensorConfiguration");

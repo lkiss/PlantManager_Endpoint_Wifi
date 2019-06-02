@@ -28,7 +28,7 @@ void ServerService::configureServer()
         else
         {
             this->configService.setConfiguration(server->arg("plain"));
-            server->send(200, "application/json", server->arg("plain"));
+            server->send(200);
             delay(300);
             this->isConfigSet = true;
         }
