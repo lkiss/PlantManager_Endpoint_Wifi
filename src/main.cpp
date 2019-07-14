@@ -32,7 +32,7 @@ void setup()
     wifiService.connectIfConfigured();
 
     Serial.swap();
-    // Serial.println("Not swapped");
+    //Serial.println("Not swapped");
 
     digitalWrite(statusLedPin, HIGH);
 }
