@@ -45,9 +45,9 @@ void loop()
     {
         utilities.oscillatePin(statusLedPin, 500, 1);
         String sensorId = Serial.readStringUntil(' ');
-        String sensorNumber = Serial.readStringUntil('\n');
+        String sensorIndex = Serial.readStringUntil('\n');
         sensorId.trim();
-        sensorNumber.trim();
+        sensorIndex.trim();
 
         // Serial.print("SensorId: ");
         // Serial.println(sensorId);
@@ -64,7 +64,7 @@ void loop()
         if (configService.isCloudConfigured())
         {
             utilities.oscillatePin(statusLedPin, 500, 2);
-            sensorConfiguration = dataService.getsensorConfiguration(sensorId, sensorNumber);
+            sensorConfiguration = dataService.getsensorConfiguration(sensorId, sensorIndex);
         }
         else
         {
@@ -96,7 +96,7 @@ void loop()
             // Serial.println("Before sensor read");
             messageFromSensor.concat(Serial.readStringUntil('\n'));
 
-            dataService.sendSensorReadings(messageFromSensor, sensorId, sensorNumber);
+            dataService.sendSensorReadings(messageFromSensor, sensorId, sensorIndex);
             utilities.oscillatePin(statusLedPin, 500, 4);
         }
 

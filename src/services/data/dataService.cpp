@@ -5,10 +5,10 @@ DataService::DataService(ConfigService configService)
     this->configurationService = configService;
 }
 
-int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId, String &sensorNumber)
+int DataService::sendSensorReadings(String &sensorReadingsJson, String &deviceId, String &sensorIndex)
 {
     Configuration config = this->configurationService.getConfiguration();
-    String requestUrl = config.appServer + "/" + sensorId + "/" + sensorNumber + "/reading";
+    String requestUrl = config.appServer + "/readings/" + deviceId + "/" + sensorIndex;
 
     httpClient.begin(requestUrl);
     httpClient.addHeader("Content-Type", "application/json");
@@ -27,12 +27,12 @@ int DataService::sendSensorReadings(String &sensorReadingsJson, String &sensorId
     return httpStatusCode;
 }
 
-String DataService::getConfiguration(String &sensorId, String &sensorNumber)
+String DataService::getConfiguration(String &deviceId, String &sensorIndex)
 {
     Configuration config = this->configurationService.getConfiguration();
     String configPayload = "";
 
-    String requestUrl = config.appServer + "/" + sensorId + "/" + sensorNumber + "/configuration";
+    String requestUrl = config.appServer + "/devices/" + deviceId + "/" + sensorIndex + "/configuration";
 
     httpClient.begin(requestUrl);
 
