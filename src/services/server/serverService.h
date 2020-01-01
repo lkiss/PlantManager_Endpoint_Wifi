@@ -7,11 +7,14 @@
 
 #include "../config/configService.h"
 #include "../../constants.h"
+#include "../../utility/utility.h"
 
 class ServerService
 {
 private:
   ConfigService configService;
+  JsonService jsonService;
+  Utility utility;
   ESP8266WebServer *server;
   bool isConfigSet = false;
 

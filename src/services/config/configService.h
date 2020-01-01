@@ -21,6 +21,7 @@ public:
   ConfigService(JsonService jsonService);
 
   Configuration getConfiguration();
+  String getRawConfiguration();
   void setConfiguration(String config);
   bool isCloudConfigured();
 };

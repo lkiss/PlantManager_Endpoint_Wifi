@@ -20,6 +20,11 @@ Configuration ConfigService::getConfiguration()
   return config;
 }
 
+String ConfigService::getRawConfiguration()
+{
+  return this->getConfig();
+}
+
 void ConfigService::setConfiguration(String config)
 {
   // Serial.println("SetConfiguration");

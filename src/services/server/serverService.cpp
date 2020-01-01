@@ -13,10 +13,13 @@ void ServerService::configureAccessPoint()
 
 void ServerService::configureServer()
 {
-    ConfigService configService = this->configService;
-
     this->server->on("/", HTTP_GET, [this]() {
-        this->server->send(200);
+        this->server->send(200, "application-json", "{\"deviceId\": \"" + DEVICE_ID + "\"""}");
+        delay(300);
+    });
+
+    this->server->on("/configuration", HTTP_GET, [this]() {
+        server->send(200, "application-json", this->configService.getRawConfiguration());
         delay(300);
     });
 
@@ -42,6 +45,7 @@ void ServerService::startListening()
     while (!this->isConfigSet)
     {
         this->server->handleClient();
+        utility.oscillatePin(StatusLedPin, 100, 3);
     }
 
     this->dispose();
