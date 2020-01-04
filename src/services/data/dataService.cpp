@@ -8,7 +8,7 @@ DataService::DataService(ConfigService configService)
 int DataService::sendSensorReadings(String &sensorReadingsJson, String &deviceId, String &sensorIndex)
 {
     Configuration config = this->configurationService.getConfiguration();
-    String requestUrl = config.appServer + "/readings/" + deviceId + "/" + sensorIndex;
+    String requestUrl = config.appServer + "/readings/iot/" + deviceId + "/" + sensorIndex;
 
     httpClient.begin(requestUrl);
     httpClient.addHeader("Content-Type", "application/json");
@@ -32,7 +32,7 @@ String DataService::getConfiguration(String &deviceId, String &sensorIndex)
     Configuration config = this->configurationService.getConfiguration();
     String configPayload = "";
 
-    String requestUrl = config.appServer + "/devices/" + deviceId + "/" + sensorIndex + "/configuration";
+    String requestUrl = config.appServer + "/devices/iot/" + deviceId + "/" + sensorIndex + "/configuration";
 
     httpClient.begin(requestUrl);
 
@@ -59,7 +59,7 @@ String DataService::getsensorConfiguration(String &sensorId, String &sensorNumbe
     Configuration config = this->configurationService.getConfiguration();
     String sensorConfiguration = "";
 
-    String requestUrl = config.appServer + "/" + sensorId + "/" + sensorNumber + "/configuration";
+    String requestUrl = config.appServer + "/devices/iot/" + sensorId + "/" + sensorNumber + "/configuration";
 
     // Serial.print("Request URL");
     // Serial.println(requestUrl);

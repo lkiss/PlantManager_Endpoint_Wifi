@@ -23,7 +23,7 @@ Configuration JsonService::convertJsonToConfig(String &configJson)
     // Serial.println(config["sensorConfiguration"].as<char *>());
 
     configuration.sensorConfiguration = document["sc"].as<String>();
-    configuration.appServer = document["as"].as<String>();
+    configuration.appServer = document["appserv"].as<String>();
     configuration.ssid = document["ssid"].as<String>();
     configuration.password = document["pswd"].as<String>();
 

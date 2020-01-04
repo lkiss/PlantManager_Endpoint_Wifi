@@ -14,16 +14,16 @@ void ServerService::configureAccessPoint()
 void ServerService::configureServer()
 {
     this->server->on("/", HTTP_GET, [this]() {
-        this->server->send(200, "application-json", "{\"deviceId\": \"" + DEVICE_ID + "\"""}");
+        this->server->send(200, "application/json", "{\"deviceId\": \"" + DEVICE_ID + "\"""}");
         delay(300);
     });
 
     this->server->on("/configuration", HTTP_GET, [this]() {
-        server->send(200, "application-json", this->configService.getRawConfiguration());
+        server->send(200, "application/json", this->configService.getRawConfiguration());
         delay(300);
     });
 
-    server->on("/", HTTP_PUT, [this]() {
+    server->on("/configuration", HTTP_PUT, [this]() {
         if (server->hasArg("plain") == false)
         {
             server->send(400);
@@ -31,9 +31,7 @@ void ServerService::configureServer()
         else
         {
             this->configService.setConfiguration(server->arg("plain"));
-            server->send(200);
-            delay(300);
-            this->isConfigSet = true;
+            server->send(200, "application/json", this->configService.getRawConfiguration());
         }
     });
 }
