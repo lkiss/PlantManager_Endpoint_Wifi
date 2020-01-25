@@ -14,9 +14,9 @@ private:
 
 public:
   DataService(ConfigService configService);
-  int sendSensorReadings(String &sensorReadingsJson, String &sensorId, String &sensorNumber);
-  String getConfiguration(String &sensorId, String &sensorNumber);
-  String getsensorConfiguration(String &sensorId, String &sensorNumber);
+  int sendSensorReadings(String &sensorReadingsJson, String &deviceId, String &sensorNumber);
+  String getConfiguration(String &deviceId, String &sensorNumber);
+  String getsensorConfiguration(String &deviceId, String &sensorNumber);
 };
 
 #endif
