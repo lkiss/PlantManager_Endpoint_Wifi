@@ -43,7 +43,7 @@ void ServerService::startListening()
     while (!this->isConfigSet)
     {
         this->server->handleClient();
-        utility.oscillatePin(StatusLedPin, 100, 3);
+        // utility.oscillatePin(StatusLedPin, 100, 3);
     }
 
     this->dispose();

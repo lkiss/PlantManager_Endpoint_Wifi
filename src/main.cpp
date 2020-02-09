@@ -25,6 +25,7 @@ void setup()
     pinMode(reConfigPin, INPUT);
     digitalWrite(readyPin, LOW);
     Serial.begin(9600);
+    Serial.setTimeout(2000);
     if (digitalRead(reConfigPin) == HIGH)
     {
         serverService.start();
@@ -33,6 +34,7 @@ void setup()
 
     Serial.swap();
     // Serial.println("Not swapped");
+    // Serial.flush();
 
     digitalWrite(statusLedPin, HIGH);
 }
@@ -43,7 +45,14 @@ void loop()
 
     if (Serial.available())
     {
-        utilities.oscillatePin(statusLedPin, 500, 1);
+        utilities.waitMessage("CONFIG_GET");
+        while (!Serial.available())
+        {
+            yield();
+        }
+
+        //  utilities.oscillatePin(statusLedPin, 500, 1);
+
         String sensorId = Serial.readStringUntil(' ');
         String sensorIndex = Serial.readStringUntil('\n');
         sensorId.trim();
@@ -63,12 +72,12 @@ void loop()
 
         if (configService.isCloudConfigured())
         {
-            utilities.oscillatePin(statusLedPin, 500, 2);
+            utilities.oscillatePin(statusLedPin, 500, 1);
             sensorConfiguration = dataService.getsensorConfiguration(sensorId, sensorIndex);
         }
         else
         {
-            utilities.oscillatePin(statusLedPin, 500, 3);
+            // utilities.oscillatePin(statusLedPin, 500, 3);
             // Serial.println("Configuration from memory: ");
             // Serial.println(configService.getConfiguration().sensorConfiguration);
 
@@ -83,11 +92,15 @@ void loop()
             sensorConfiguration.replace("'", "\"");
         }
 
+        utilities.sendMessageAndWait("CONFIG_SUCCESS");
+
         // Serial.println("Sending plant growing step config");
         Serial.println(sensorConfiguration);
 
         if (configService.isCloudConfigured())
         {
+            utilities.waitMessage("READING_SET");
+
             while (!Serial.available())
             {
                 yield();
@@ -97,7 +110,7 @@ void loop()
             messageFromSensor.concat(Serial.readStringUntil('\n'));
 
             dataService.sendSensorReadings(messageFromSensor, sensorId, sensorIndex);
-            utilities.oscillatePin(statusLedPin, 500, 4);
+            // utilities.oscillatePin(statusLedPin, 500, 4);
         }
 
         Serial.flush();
